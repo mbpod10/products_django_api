@@ -10,13 +10,17 @@ def index_product_view(request):
 
 
 def product_detail_view(request, pk):
+    # print()
     try:
         product = Product.objects.get(pk=pk)
         response = {
             "data":
             {
                 "name": product.name,
-                "manufacturer": product.manufacturer.name,
+                "manufacturer": {
+                    'name': product.manufacturer.name,
+                    'location': product.manufacturer.location
+                },
                 "description": product.description,
                 "photo": product.photo.url,
                 "price": product.price,
