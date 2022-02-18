@@ -120,5 +120,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# Place where user photo uploads go
 MEDIA_ROOT = 'uploads'
+
+# url attachment where photo is found
+# example with image uploaded as lamp.jpeg: 'http://127.0.0.1:8000/media/lamp.jpeg'
 MEDIA_URL = '/media/'
