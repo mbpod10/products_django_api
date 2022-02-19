@@ -1,3 +1,4 @@
+from traceback import print_tb
 from django.http import JsonResponse
 from .models import Manufacturer, Product
 from django.core.exceptions import ObjectDoesNotExist
@@ -10,7 +11,6 @@ def index_product_view(request):
 
 
 def product_detail_view(request, pk):
-    # print()
     try:
         product = Product.objects.get(pk=pk)
         print(product.manufacturer)
@@ -48,7 +48,8 @@ def manufacturer_detail_view(request, pk):
                 "products": []
             }
         }
-        products = list(Product.objects.filter(manufacturer=manufacturer))
+        # products = list(Product.objects.filter(manufacturer=manufacturer))
+        products = list(manufacturer.products.all())
         for product in products:
             response["data"]["products"].append(
                 {
@@ -67,12 +68,20 @@ def manufacturer_detail_view(request, pk):
     return JsonResponse(response)
 
 
-def manufacturer_active_list_view(request):
-    manufactures = list(Manufacturer.objects.filter(active=True))
+def manufacturer_active_list_view(request, bool):
+    if bool == "true":
+        req = True
+    elif bool == "false":
+        req = False
+    manufactures = list(Manufacturer.objects.filter(active=req))
     data = {
-        "data": []
+        f"{bool}": []
     }
-    for man in manufactures:
-        data["data"].append(man)
+    for manufacturer in manufactures:
+        data[f"{bool}"].append({
+            "name": manufacturer.name,
+            "location": manufacturer.location,
+            "active": manufacturer.active,
+        })
 
     return JsonResponse(data)
